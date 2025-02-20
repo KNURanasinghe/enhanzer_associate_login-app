@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_login_app/screens/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,11 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mobile Login',
       theme: ThemeData(
-       
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Text(""),
+      home: const LoginScreen(),
     );
   }
 }
