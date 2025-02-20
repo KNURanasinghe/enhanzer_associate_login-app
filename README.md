@@ -56,13 +56,14 @@ This is a simple Flutter mobile application that implements login functionality 
 │   ├── 📄 main.dart (Entry point)
 │   ├── 📁 screens
 │   │   ├── 📄 login_screen.dart
-│   │   ├── 📄 home_screen.dart
+│   │   ├── 📄 dashboard_screen.dart
 │   ├── 📁 services
 │   │   ├── 📄 api_service.dart
-│   │   ├── 📄 database_helper.dart
-│   ├── 📁 models
-│   │   ├── 📄 user_model.dart
-│   ├── 📁 utils
+│   ├── 📁 db
+│   │   ├── 📄 db_helperl.dart
+│   ├── 📁 components
+│   │   ├── 📄 custom_text_field.dart
+│   ├── 📁 constant
 │   │   ├── 📄 constants.dart
 ├── 📄 pubspec.yaml (Dependencies)
 ```
@@ -92,7 +93,7 @@ flutter run
 
 📌 sqflite - For local database storage
 
-📌 path_provider - For accessing database directory
+📌 path - For accessing database directory
 
 
 ## 🎥 Assignment Submission
