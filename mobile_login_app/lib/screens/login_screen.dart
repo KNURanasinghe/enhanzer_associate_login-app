@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_login_app/components/custom_text_field.dart';
 
+import '../services/api_service.dart';
+import 'dashboard_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -9,8 +12,42 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final userController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+  String _errorMessage = "";
+  bool showPassword = true;
+
+  Future<void> _handleLogin() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = "";
+    });
+    String username = _usernameController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if (username.isEmpty || password.isEmpty) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = "Username and Password cannot be empty.";
+      });
+      return;
+    }
+    final response = await ApiService.login(username, password);
+    setState(() {
+      _isLoading = false;
+    });
+    if (response['Status_Code'] == 200) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardScreen(response)),
+      );
+    } else {
+      setState(() {
+        _errorMessage = "Login failed. Please check your credentials.";
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 50,
               ),
               CustomTextField(
-                controller: userController,
+                controller: _usernameController,
                 labelText: "username",
                 obsecureText: false,
               ),
@@ -45,23 +82,37 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 30,
               ),
               CustomTextField(
-                controller: passwordController,
-                labelText: "password",
-                obsecureText: true,
-              ),
+                  controller: _passwordController,
+                  labelText: "password",
+                  obsecureText: showPassword,
+                  prefixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          showPassword = !showPassword;
+                        });
+                      },
+                      icon: showPassword
+                          ? const Icon(Icons.visibility)
+                          : const Icon(Icons.visibility_off))),
               const SizedBox(
                 height: 30,
               ),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[600],
-                    fixedSize: const Size(200, 50)),
-                child: const Text(
-                  "Login",
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
-              )
+              _errorMessage.isNotEmpty
+                  ? Text(_errorMessage,
+                      style: const TextStyle(color: Colors.red))
+                  : const SizedBox.shrink(),
+              _isLoading
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: _handleLogin,
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue[600],
+                          fixedSize: const Size(200, 50)),
+                      child: const Text(
+                        "Login",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                    )
             ],
           ),
         ),

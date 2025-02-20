@@ -4,11 +4,14 @@ class CustomTextField extends StatelessWidget {
   final String labelText;
   final bool obsecureText;
   final TextEditingController controller;
-  const CustomTextField(
-      {super.key,
-      required this.controller,
-      required this.labelText,
-      required this.obsecureText});
+  Widget? prefixIcon;
+  CustomTextField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    required this.obsecureText,
+    this.prefixIcon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +20,12 @@ class CustomTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white70,
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             labelText: labelText,
+            suffixIcon: prefixIcon,
             labelStyle: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.w400)),
         obscureText: obsecureText,
